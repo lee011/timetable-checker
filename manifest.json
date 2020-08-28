@@ -1,0 +1,53 @@
+{
+    "content_scripts": [
+        {
+            "js": [
+                "js/jquery.min.js"
+            ],
+            "matches": [
+                "https://banweb.cityu.edu.hk/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "js": [
+                "js/read.js"
+            ],
+            "matches": [
+                "https://banweb.cityu.edu.hk/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "js": [
+                "js/moment.min.js"
+            ],
+            "matches": [
+                "https://banweb.cityu.edu.hk/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true
+        }
+    ],
+    "background": {
+        "scripts": [
+            "js/bg.js"
+        ]
+    },
+    "page_action" :{
+        "default_icon":{
+            "24": "img/baseline_schedule_white_24dp.png"
+        },
+        "default_popup": "popup.html"
+    },
+    "description": "Reads class information from AIMS and match against your timetable to see if sections conflit occurs.",
+    "manifest_version": 2,
+    "name": "Timetable Checker",
+    "permissions": [
+        "https://banweb.cityu.edu.hk/",
+        "storage"
+    ],
+    "version": "0.1.0"
+}

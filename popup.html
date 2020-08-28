@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/material-components-web.js"></script>
+    <link rel="stylesheet" href="css/popup.css" />
+    <link rel="stylesheet" href="css/StyleSheet.Font.Roboto.css" />
+    <style>
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Material Icons'),
+                url(MaterialIcons-Regular.ttf) format('truetype');
+        }
+
+        body {
+            font-family: Roboto;
+            min-width: 750px;
+            min-height: 500px;
+            font-size: 16px;
+            margin: 0;
+            user-select: none;
+        }
+
+        .tabbed-content {
+            padding: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .timetable {
+            display: grid;
+            grid-template-areas: ". week""time content";
+            grid-template-columns: 60px;
+            grid-template-rows: 30px;
+            width: 100%;
+        }
+
+        .timetable .weekend {
+            background: #fbfbfc;
+            color: #87a1ad;
+        }
+
+        .timetable .week-names {
+            grid-area: week;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .timetable .week-names>div {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            box-shadow: inset 1px 0 0 #ECEFF1;
+        }
+
+        .timetable .time-interval {
+            grid-area: time;
+            display: grid;
+            grid-template-rows: repeat(16, 50px);
+            font-size: 14px;
+        }
+
+        .timetable .time-interval>div {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: start;
+            align-items: flex-start;
+            -webkit-box-pack: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 1px 0 0 #ECEFF1;
+            padding: 4px;
+        }
+
+        .timetable .content {
+            grid-area: content;
+            display: grid;
+            grid-template-rows: repeat(16, 50px);
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .timetable .background {
+            grid-area: content;
+            display: grid;
+            grid-template-rows: repeat(16, 50px);
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .timetable .content>div {
+            background-color: #ffe0b2;
+            padding: 4px;
+            border-radius: 4px;
+            margin: 2px;
+        }
+
+        .timetable .background>div {
+            box-shadow: inset 1px 0 0 #ECEFF1, inset 0 1px 0 0 #ECEFF1;
+        }
+
+        .mdc-data-table--table {
+            table-layout: auto;
+        }
+
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+
+            /* Support for all WebKit browsers. */
+            -webkit-font-smoothing: antialiased;
+            /* Support for Safari and Chrome. */
+            text-rendering: optimizeLegibility;
+
+            /* Support for Firefox. */
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Support for IE. */
+            font-feature-settings: 'liga';
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mdc-tab-bar" role="tablist" style="position: sticky; top: 0; background-color: white;">
+        <div class="mdc-tab-scroller">
+            <div class="mdc-tab-scroller__scroll-area">
+                <div class="mdc-tab-scroller__scroll-content">
+                    <button class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__icon material-icons" aria-hidden="true">schedule</span>
+                            <span class="mdc-tab__text-label">Timetable</span>
+                        </span>
+                        <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </button>
+                    <button class="mdc-tab" role="tab" aria-selected="true" tabindex="0">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__icon material-icons" aria-hidden="true">playlist_add</span>
+                            <span class="mdc-tab__text-label">Wishlist</span>
+                        </span>
+                        <span class="mdc-tab-indicator">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tabbed-content">
+        <div style="margin-bottom: 8px; border: 1px solid orange; background-color: yellow; color: black; padding: 4px; text-align: justify">
+            To update this timetable, go to Course Registration &gt; Main Menu for Web Add/Drop &gt; My Detail Schedule.
+        </div>
+        <div class="timetable">
+            <div class="week-names">
+                <div>monday</div>
+                <div>tuesday</div>
+                <div>wednesday</div>
+                <div>thursday</div>
+                <div>friday</div>
+                <div class="weekend">saturday</div>
+                <div class="weekend">sunday</div>
+            </div>
+            <div class="time-interval">
+                <div>8:00</div>
+                <div>9:00</div>
+                <div>10:00</div>
+                <div>11:00</div>
+                <div>12:00</div>
+                <div>13:00</div>
+                <div>14:00</div>
+                <div>15:00</div>
+                <div>16:00</div>
+                <div>17:00</div>
+                <div>18:00</div>
+                <div>19:00</div>
+                <div>20:00</div>
+                <div>21:00</div>
+                <div>22:00</div>
+                <div>23:00</div>
+            </div>
+            <div class="background"></div>
+            <div class="content"></div>
+        </div>
+    </div>
+    <div class="tabbed-content" style="display: none;">
+        <label class="mdc-text-field mdc-text-field--filled mdc-text-field--with-trailing-icon" id="add-crn" style="width: 100%;">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="add-crn-label">Enter CRN to add to your wishlist</span>
+            <input class="mdc-text-field__input" type="text" pattern="\d{5}" maxlength="5" aria-labelledby="add-crn-label" id="add-crn-input" />
+            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" id="add-crn-button">add</i>
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent" aria-hidden="true">You can also add CRNs to your wishlist by clicking "Add to Wishlist" link in the Master Class Schedule.</div>
+        </div>
+        <br />
+        <div style="margin-left: 12px;" title="When this is turned on, the first 10 CRNs in the wishlist will be auto-filled into the Add Classes Worksheet in the add/drop interface.&#10;Note: This action DOES NOT AUTOMATICALLY submit the changes. You still have to click 'Submit Changes' button MANUALLY to apply changes.">
+            <div class="mdc-switch" id="autofill-switch-container">
+                <div class="mdc-switch__track"></div>
+                <div class="mdc-switch__thumb-underlay">
+                    <div class="mdc-switch__thumb"></div>
+                    <input type="checkbox" id="autofill-switch" class="mdc-switch__native-control" role="switch" aria-checked="false">
+                </div>
+            </div>
+            <label for="autofill-switch" style="margin-left: 12px;">
+                Auto-fill CRNs into the Add Classes Worksheet of Add/Drop interface</label>
+        </div>
+        <br />
+        <button class="mdc-button mdc-button--outlined" id="empty-button">
+            <div class="mdc-button__ripple"></div>
+            <i class="material-icons mdc-button__icon" aria-hidden="true">clear</i>
+            <span class="mdc-button__label">Clear Wishlist</span>
+        </button>
+        <button class="mdc-button mdc-button--outlined" id="delete-button">
+            <div class="mdc-button__ripple"></div>
+            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
+            <span class="mdc-button__label">Delete Selected</span>
+        </button>
+        <ul class="mdc-list" id="crn-list"></ul>
+    </div>
+    <div class="mdc-snackbar" aria-live="assertive" aria-atomic="true" aria-hidden="true">
+        <div class="mdc-snackbar__surface">
+            <div class="mdc-snackbar__label"></div>
+            <div class="mdc-snackbar__actions">
+                <button type="button" class="mdc-button mdc-snackbar__action" style="display: none">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <template id="crn-item-template">
+        <li class="mdc-list-item" role="checkbox" aria-checked="false">
+            <span class="mdc-list-item__ripple"></span>
+            <div class="mdc-form-field mdc-list-item__graphic">
+                <div class="mdc-checkbox">
+                    <input type="checkbox" class="mdc-checkbox__native-control" />
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                            <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                    <div class="mdc-checkbox__ripple"></div>
+                </div>
+            </div>
+            <label class="mdc-list-item__text">Option 1</label>
+        </li>
+    </template>
+    <script src="js/popup.js"></script>
+</body>
+
+</html>
