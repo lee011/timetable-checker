@@ -43,7 +43,7 @@
         "default_popup": "popup.html"
     },
     "icons": { "128": "img/icon.png" },
-    "description": "Timetable checker for CityU mates. It reads class information from AIMS and match against your timetable to see if time conflits with sessions occurs.",
+    "description": "Timetable checker for CityU mates.",
     "manifest_version": 2,
     "name": "CityU Timetable Checker",
     "permissions": [
