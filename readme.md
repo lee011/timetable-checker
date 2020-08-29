@@ -1,8 +1,10 @@
 # CityU Timetable Checker
 
-Timetable checker for CityU mates. It reads class information from AIMS and match against your timetable to see if sections conflit occurs.
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/lee011/timetable-checker)
 
-**This extension only works in [AIMS](https://banweb.cityu.edu.hk/).**
+Timetable checker for CityU mates. It reads class information from AIMS and match against your timetable to see if time conflits with sessions occurs.
+
+**This extension is for CityU students only, and only works when you are using [AIMS](https://banweb.cityu.edu.hk/).**
 
 ## Browser Support
 
@@ -12,7 +14,9 @@ This is a Chromium-based-browser extension that can be installed on the latest d
 
 This extension will read your class schedule when you go to Course Registration &gt; Main Menu for Web Add/Drop &gt; My Detail Schedule.
 
-Then, when you browse the Master Class Schedule, you can find out whether conflicts with the section and you current schedule occurs. (Example below)
+Then, when you browse the Master Class Schedule and check sections provided by a particular course, you can find out whether conflicts with the section and you current schedule occurs.
+
+The extension will append two cell to each row of the table, showing the status and available actions. (Example below)
 
 ![image](example.png)
 
