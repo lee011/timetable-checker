@@ -35,24 +35,26 @@ s_autofill.listen("change", () => {
 chrome.storage.local.get(["ttb", "wishlist", "autofill"], ({ ttb, wishlist, autofill }) => {
     s_autofill.checked = autofill || false;
 
-    ttb.forEach((i) => {
-        i.times.forEach(j => {
-            let times = j.time.map(t => new moment(t, "hh:mm a"));
-            let id = `ttb-${j.day}-${times[0].hour() - 7}-${times[1].hour() - 6}`;
-            if ($(`#${id}`).length === 0) {
-                let div$ = $("<div></div");
-                div$.html(`${i.name[1].replace(" ", "")} <small>${i.name[2]}</small>`);
-                div$.attr("title", `${i.name[0]}\n${i.crn}\n${times[0].format("HH:mm")} - ${times[1].format("HH:mm")}`);
-                div$.attr("id", id);
-                div$.css({
-                    "grid-row-start": `${times[0].hour() - 7}`,
-                    "grid-row-end": `${times[1].hour() - 6}`,
-                    "grid-column-start": `${j.day}`
-                });
-                $(".timetable .content").append(div$);
-            }
+    if (ttb != null) {
+        ttb.forEach((i) => {
+            i.times.forEach(j => {
+                let times = j.time.map(t => new moment(t, "hh:mm a"));
+                let id = `ttb-${j.day}-${times[0].hour() - 7}-${times[1].hour() - 6}`;
+                if ($(`#${id}`).length === 0) {
+                    let div$ = $("<div></div");
+                    div$.html(`${i.name[1].replace(" ", "")} <small>${i.name[2]}</small>`);
+                    div$.attr("title", `${i.name[0]}\n${i.crn}\n${times[0].format("HH:mm")} - ${times[1].format("HH:mm")}`);
+                    div$.attr("id", id);
+                    div$.css({
+                        "grid-row-start": `${times[0].hour() - 7}`,
+                        "grid-row-end": `${times[1].hour() - 6}`,
+                        "grid-column-start": `${j.day}`
+                    });
+                    $(".timetable .content").append(div$);
+                }
+            });
         });
-    });
+    }
 
     if (wishlist != null) {
         wishlist.map(v => {

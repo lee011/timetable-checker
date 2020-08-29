@@ -21,6 +21,7 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
     });
 } else if (location.href.startsWith("https://banweb.cityu.edu.hk/pls/PROD/hwscrssh_cityu.P_DispOneSection")) {
     chrome.storage.local.get("ttb", ({ ttb }) => {
+        let ctd$;
         $(".body table[border] tr").each((i, v) => {
             if (i === 0) {
                 let th1$ = $("<th></th>").text("Status");
@@ -31,42 +32,89 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                 let crash = null;
                 let td1$ = $("<td></td>");
                 let td2$ = $("<td></td>");
-                let lastRow = { crn: 0, color: "green" };
                 if ($(v).is("[bgcolor='#ffccff']")) {
                     if (ttb.findIndex(u => u.crn === parseInt($(v).children().eq(0).text())) !== -1) {
                         td1$.css("color", "red").text(`Course registered`);
                     } else {
-                        if (FULL_REGEX.test($(v).children().eq(6).text())) {
-                            if (FULL_REGEX.test($(v).children().eq(8).text())) {
+                        if ($(v).children().eq(6).text().trim() !== "")
+                            ctd$ = $(v);
+                        if (FULL_REGEX.test(ctd$.children().eq(6).text())) {
+                            if (FULL_REGEX.test(ctd$.children().eq(8).text())) {
                                 td1$.css("color", "red").text("Section is full, waitlist full");
-                            } else if ($(v).children().eq(8).text().includes("N")) {
+                            } else if (ctd$.children().eq(8).text().includes("N")) {
                                 td1$.css("color", "red").text("Section is full, waitlist not available");
+                            } else {
+                                if ($(v).children().eq(11).text().trim() === "") {
+                                    td1$.css("color", "darkorange").html("Section is full, waitlist available<br />Registrable");
+                                    if ($(v).children().eq(0).text().trim() !== "") {
+                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "href": "#" }).click(addCRNToWishlist));
+                                    }
+                                } else {
+                                    let day = DAYS.indexOf($(v).children().eq(10).text());
+                                    let ztime = $(v).children().eq(11).text().split(" - ").map(t => new moment(t, "HH:mm"));
+                                    y: for (let i of ttb) {
+                                        for (let j of i.times) {
+                                            let times = j.time.map(t => new moment(t, "hh:mm a"));
+                                            if (day === j.day && ztime.some(m => m.isBetween(times[0], times[1], undefined, "[]"))) {
+                                                flag = false;
+                                                crash = `${i.name[1].replace(" ", "")} ${i.name[2]}`;
+                                                break y;
+                                            }
+                                        }
+                                    }
+                                    if (flag) {
+                                        td1$.css("color", "darkorange").html("Section is full, waitlist available<br />No conflicts");
+                                        if ($(v).children().eq(0).text().trim() !== "") {
+                                            td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-waitlist": "true", "href": "#" }).click(addCRNToWishlist));
+                                            td2$.append(" | ");
+                                        }
+                                        if ($(v).children().eq(11).text().trim() !== "") {
+                                            td2$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
+                                        }
+                                    } else {
+                                        td1$.css("color", "red").html(`Section is full, waitlist available<br />Conflict with ${crash}`);
+                                        if ($(v).children().eq(0).text().trim() !== "") {
+                                            td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": "true", "data-waitlist": "true", "href": "#" }).click(addCRNToWishlist));
+                                            td2$.append(" | ");
+                                        }
+                                        if ($(v).children().eq(11).text().trim() !== "") {
+                                            td2$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if ($(v).children().eq(11).text().trim() === "") {
+                                td1$.css("color", "green").text("Registrable");
+                                if ($(v).children().eq(0).text().trim() !== "") {
+                                    td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "href": "#" }).click(addCRNToWishlist));
+                                }
                             } else {
                                 let day = DAYS.indexOf($(v).children().eq(10).text());
                                 let ztime = $(v).children().eq(11).text().split(" - ").map(t => new moment(t, "HH:mm"));
-                                y: for (let i of ttb) {
+                                x: for (let i of ttb) {
                                     for (let j of i.times) {
                                         let times = j.time.map(t => new moment(t, "hh:mm a"));
                                         if (day === j.day && ztime.some(m => m.isBetween(times[0], times[1], undefined, "[]"))) {
                                             flag = false;
                                             crash = `${i.name[1].replace(" ", "")} ${i.name[2]}`;
-                                            break y;
+                                            break x;
                                         }
                                     }
                                 }
                                 if (flag) {
-                                    td1$.css("color", "darkorange").html("Section is full, waitlist available<br />No conflicts");
+                                    td1$.css("color", "green").text("No conflicts");
                                     if ($(v).children().eq(0).text().trim() !== "") {
-                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-waitlist": "true", "href": "#" }).click(addCRNToWishlist));
+                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "href": "#" }).click(addCRNToWishlist));
                                         td2$.append(" | ");
                                     }
                                     if ($(v).children().eq(11).text().trim() !== "") {
                                         td2$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
                                     }
                                 } else {
-                                    td1$.css("color", "red").html(`Section is full, waitlist available<br />Conflict with ${crash}`);
+                                    td1$.css("color", "red").text(`Conflict with ${crash}`);
                                     if ($(v).children().eq(0).text().trim() !== "") {
-                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": "true", "data-waitlist": "true", "href": "#" }).click(addCRNToWishlist));
+                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": "true", "href": "#" }).click(addCRNToWishlist));
                                         td2$.append(" | ");
                                     }
                                     if ($(v).children().eq(11).text().trim() !== "") {
@@ -74,39 +122,11 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                     }
                                 }
                             }
-                        } else {
-                            let day = DAYS.indexOf($(v).children().eq(10).text());
-                            let ztime = $(v).children().eq(11).text().split(" - ").map(t => new moment(t, "HH:mm"));
-                            x: for (let i of ttb) {
-                                for (let j of i.times) {
-                                    let times = j.time.map(t => new moment(t, "hh:mm a"));
-                                    if (day === j.day && ztime.some(m => m.isBetween(times[0], times[1], undefined, "[]"))) {
-                                        flag = false;
-                                        crash = `${i.name[1].replace(" ", "")} ${i.name[2]}`;
-                                        break x;
-                                    }
-                                }
-                            }
-                            if (flag) {
-                                td1$.css("color", "green").text("No conflicts");
-                                if ($(v).children().eq(0).text().trim() !== "") {
-                                    td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "href": "#" }).click(addCRNToWishlist));
-                                    td2$.append(" | ");
-                                }
-                                if ($(v).children().eq(11).text().trim() !== "") {
-                                    td2$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
-                                }
-                            } else {
-                                td1$.css("color", "red").text(`Conflict with ${crash}`);
-                                if ($(v).children().eq(0).text().trim() !== "") {
-                                    td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": "true", "href": "#" }).click(addCRNToWishlist));
-                                    td2$.append(" | ");
-                                }
-                                if ($(v).children().eq(11).text().trim() !== "") {
-                                    td2$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
-                                }
-                            }
                         }
+                    }
+                } else if ($(v).children().length === 16) {
+                    if ($(v).children().eq(8).text().includes("N")) {
+                        td1$.css("color", "red").text("Section not web-enabled");
                     }
                 }
                 $(v).append([td1$, td2$]);
