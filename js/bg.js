@@ -5,3 +5,16 @@ chrome.tabs.onUpdated.addListener(function (i, c, t) {
         }
     });
 });
+
+chrome.runtime.onMessage.addListener(({type, data}, s) => {
+    if (type === "preview") {
+        chrome.storage.local.set({ preview: data }, () => {
+            chrome.windows.create({
+                url: "preview.html",
+                type: "popup",
+                width: 900,
+                focused: true
+            });
+        });
+    }
+});

@@ -37,16 +37,20 @@ chrome.storage.local.get(["ttb", "wishlist", "autofill"], ({ ttb, wishlist, auto
 
     ttb.forEach((i) => {
         i.times.forEach(j => {
-            let div$ = $("<div></div");
             let times = j.time.map(t => new moment(t, "hh:mm a"));
-            div$.html(`${i.name[1].replace(" ", "")} <small>${i.name[2]}</small>`);
-            div$.attr("title", i.name[0]);
-            $(".timetable .content").append(div$);
-            div$.css({
-                "grid-row-start": `${times[0].hour() - 7}`,
-                "grid-row-end": `${times[1].hour() - 6}`,
-                "grid-column-start": `${j.day}`
-            });
+            let id = `ttb-${j.day}-${times[0].hour() - 7}-${times[1].hour() - 6}`;
+            if ($(`#${id}`).length === 0) {
+                let div$ = $("<div></div");
+                div$.html(`${i.name[1].replace(" ", "")} <small>${i.name[2]}</small>`);
+                div$.attr("title", `${i.name[0]}\n${i.crn}\n${times[0].format("HH:mm")} - ${times[1].format("HH:mm")}`);
+                div$.attr("id", id);
+                div$.css({
+                    "grid-row-start": `${times[0].hour() - 7}`,
+                    "grid-row-end": `${times[1].hour() - 6}`,
+                    "grid-column-start": `${j.day}`
+                });
+                $(".timetable .content").append(div$);
+            }
         });
     });
 
@@ -125,9 +129,14 @@ function emptyWishlist() {
 }
 
 function addCRNToWishlist(crn) {
-    chrome.storage.local.get("wishlist", ({ wishlist }) => {
+    chrome.storage.local.get(["ttb", "wishlist"], ({ ttb, wishlist }) => {
         if (wishlist == null) {
             wishlist = [];
+        }
+        if (ttb.findIndex(v => v.crn === crn) !== -1) {
+            snackbar.labelText = "This course is already registered.";
+            snackbar.open();
+            return;
         }
         if (wishlist.includes(crn)) {
             snackbar.labelText = "CRN already exists.";

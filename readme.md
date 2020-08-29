@@ -1,10 +1,12 @@
-# Timetable Checker
+# CityU Timetable Checker
 
 Timetable checker for CityU mates. It reads class information from AIMS and match against your timetable to see if sections conflit occurs.
 
+**This extension only works in [AIMS](https://banweb.cityu.edu.hk/).**
+
 ## Browser Support
 
-This is a Chrome extension that can be installed on the latest desktop versions of Google Chrome, Opera and Microsoft Edge. (Other Chromium-based browsers may be used, but we do not guarantee it works)
+This is a Chromium-based-browser extension that can be installed on the latest desktop versions of Google Chrome, Opera and Microsoft Edge. (Other Chromium-based browsers may be used, but we do not guarantee it works)
 
 ## How it works
 
@@ -34,5 +36,6 @@ This extension also provides a wishlist function for you to save the CRNs of the
 3. **Section is full, waitlist available (orange)**: The section do not have available seat, but you can add to the waitlist of the section. Combined with statuses (1) or (2).
 4. **Section is full, waitlist full (red)**: The section do not have available seat, and the waitlist of the section is also full.
 5. **Section is full, waitlist not available (red)**: The section do not have available seat, and waitlist is not provided of the section.
+6. **Course registered (red)**: You have registered the course.
 
-Note: If the status of a particular section is (4) or (5), the option of adding the CRN into the wishlist will not be shown.
+Note: If the status of a particular section is (4), (5) or (6), the option of adding the CRN into the wishlist will not be shown.

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timetable Preview</title>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/material-components-web.js"></script>
+    <link rel="stylesheet" href="css/popup.css" />
+    <link rel="stylesheet" href="css/StyleSheet.Font.Roboto.css" />
+    <style>
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Material Icons'),
+                url(MaterialIcons-Regular.ttf) format('truetype');
+        }
+
+        body {
+            font-family: Roboto;
+            min-width: 750px;
+            min-height: 599px;
+            font-size: 16px;
+            margin: 0;
+            user-select: none;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .timetable {
+            display: grid;
+            grid-template-areas: ". week""time content";
+            grid-template-columns: 60px;
+            grid-template-rows: 30px;
+            width: 100%;
+        }
+
+        .timetable .weekend {
+            background: #fbfbfc;
+            color: #87a1ad;
+        }
+
+        .timetable .week-names {
+            grid-area: week;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .timetable .week-names>div {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            box-shadow: inset 1px 0 0 #ECEFF1;
+        }
+
+        .timetable .time-interval {
+            grid-area: time;
+            display: grid;
+            grid-template-rows: repeat(16, 50px);
+            font-size: 14px;
+        }
+
+        .timetable .time-interval>div {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: start;
+            align-items: flex-start;
+            -webkit-box-pack: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 1px 0 0 #ECEFF1;
+            padding: 4px;
+        }
+
+        .timetable .content {
+            grid-area: content;
+            display: grid;
+            grid-template-rows: repeat(16, 50px);
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .timetable .background {
+            grid-area: content;
+            display: grid;
+            grid-template-rows: repeat(16, 50px);
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .timetable .content>div {
+            background-color: #ffe0b2;
+            padding: 4px;
+            border-radius: 4px;
+            margin: 2px;
+        }
+
+        .timetable .content>div.preview {
+            background-color: rgba(178, 235, 242, 0.6);
+        }
+
+        .timetable .background>div {
+            box-shadow: inset 1px 0 0 #ECEFF1, inset 0 1px 0 0 #ECEFF1;
+        }
+
+        .mdc-data-table--table {
+            table-layout: auto;
+        }
+
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+
+            /* Support for all WebKit browsers. */
+            -webkit-font-smoothing: antialiased;
+            /* Support for Safari and Chrome. */
+            text-rendering: optimizeLegibility;
+
+            /* Support for Firefox. */
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Support for IE. */
+            font-feature-settings: 'liga';
+        }
+    </style>
+</head>
+
+<body>
+    <div class="timetable">
+        <div class="week-names">
+            <div>monday</div>
+            <div>tuesday</div>
+            <div>wednesday</div>
+            <div>thursday</div>
+            <div>friday</div>
+            <div class="weekend">saturday</div>
+            <div class="weekend">sunday</div>
+        </div>
+        <div class="time-interval">
+            <div>8:00</div>
+            <div>9:00</div>
+            <div>10:00</div>
+            <div>11:00</div>
+            <div>12:00</div>
+            <div>13:00</div>
+            <div>14:00</div>
+            <div>15:00</div>
+            <div>16:00</div>
+            <div>17:00</div>
+            <div>18:00</div>
+            <div>19:00</div>
+            <div>20:00</div>
+            <div>21:00</div>
+            <div>22:00</div>
+            <div>23:00</div>
+        </div>
+        <div class="background"></div>
+        <div class="content"></div>
+    </div>
+    <script src="js/preview.js"></script>
+</body>
+
+</html>
