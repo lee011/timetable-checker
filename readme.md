@@ -33,13 +33,14 @@ This extension also provides a wishlist function for you to save the CRNs of the
 
 ## Status explaination
 
-**Statuses will be displayed only if the section is web-enabled (rows in pink and with WEB = "Y").**
+**Statuses will be displayed only if the section is web-enabled (rows in pink and with WEB = "Y"). If the section is not web-enabled, it always shows "Section not web-enabled".**
 
 1. **No conflicts (green)**: The section does not conflict with your current schedule.
 2. **Conflicts with \[Course Code\] \[Section\] (red)**: The section conflicts with your schedule.
-3. **Section is full, waitlist available (orange)**: The section do not have available seat, but you can add to the waitlist of the section. Combined with statuses (1) or (2).
+3. **Section is full, waitlist available (orange)**: The section do not have available seat, but you can add to the waitlist of the section. Combined with statuses (1), (2) or (7).
 4. **Section is full, waitlist full (red)**: The section do not have available seat, and the waitlist of the section is also full.
 5. **Section is full, waitlist not available (red)**: The section do not have available seat, and waitlist is not provided of the section.
 6. **Course registered (red)**: You have registered the course.
+7. **Registrable (green)**: The section does not have a time information; it still have seats.
 
 Note: If the status of a particular section is (4), (5) or (6), the option of adding the CRN into the wishlist will not be shown.
