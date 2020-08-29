@@ -36,15 +36,16 @@
             "js/bg.js"
         ]
     },
-    "page_action" :{
-        "default_icon":{
+    "page_action": {
+        "default_icon": {
             "24": "img/baseline_schedule_white_24dp.png"
         },
         "default_popup": "popup.html"
     },
-    "description": "Reads class information from AIMS and match against your timetable to see if sections conflit occurs.",
+    "icons": { "128": "img/icon.png" },
+    "description": "Timetable checker for CityU mates. It reads class information from AIMS and match against your timetable to see if time conflits with sessions occurs.",
     "manifest_version": 2,
-    "name": "Timetable Checker",
+    "name": "CityU Timetable Checker",
     "permissions": [
         "https://banweb.cityu.edu.hk/",
         "storage"
