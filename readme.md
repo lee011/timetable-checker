@@ -27,11 +27,11 @@ This extension also provides a wishlist function for you to save the CRNs of the
 
 ## How to install
 
-1. Download the ZIP archive under Releases and unzip.
+1. Download the ZIP archive under Releases or click "Download ZIP" in "Code" and unzip.
 2. Go to the extension page of your browser (e.g. chrome://extensions/)
 3. Turn on Developer Mode.
-4. Click "Load unpacked extension".
-5. Choose the unzipped folder.
+4. Click "Load unpacked".
+5. Choose the unzipped folder. (e.g. if your zip archive is unzipped to `C:\Users\yourname\Documents`, then choose `C:\Users\yourname\Documents\timetable-checker-<version>`, while `<version>` is release version (such as `v0.1.0`) or `master`)
 6. The extension is installed and listed in the extensions page.
 
 ## Status explaination
