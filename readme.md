@@ -1,6 +1,9 @@
 # CityU Timetable Checker
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lee011/timetable-checker)
+![GitHub last commit](https://img.shields.io/github/last-commit/lee011/timetable-checker)
+![GitHub Release Date](https://img.shields.io/github/release-date/lee011/timetable-checker)
+
 
 Timetable checker for CityU mates. It reads class information from AIMS and match against your timetable to see if time conflits with sessions occurs.
 
@@ -16,7 +19,7 @@ This extension will read your class schedule when you go to Course Registration 
 
 Then, when you browse the Master Class Schedule and check sections provided by a particular course, you can find out whether conflicts with the section and you current schedule occurs.
 
-The extension will append two cell to each row of the table, showing the status and available actions. (Example below)
+The extension will append 3 cells to each row of the table, showing the status and available actions. (Example below)
 
 ![image](example.png)
 
