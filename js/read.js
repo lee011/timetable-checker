@@ -34,11 +34,11 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                 let td2$ = $("<td></td>");
                 let td3$ = $("<td></td>");
                 if ($(v).is("[bgcolor='#ffccff']")) {
-                    if (ttb.findIndex(u => u.crn === parseInt($(v).children().eq(0).text())) !== -1) {
+                    if ($(v).children().eq(6).text().trim() !== "")
+                        ctd$ = $(v);
+                    if (ttb.findIndex(u => u.crn === parseInt(ctd$.children().eq(0).text())) !== -1) {
                         td1$.css("color", "red").text(`Course registered`);
                     } else {
-                        if ($(v).children().eq(6).text().trim() !== "")
-                            ctd$ = $(v);
                         if (FULL_REGEX.test(ctd$.children().eq(6).text())) {
                             if (FULL_REGEX.test(ctd$.children().eq(8).text())) {
                                 td1$.css("color", "red").text("Section is full, waitlist full");
