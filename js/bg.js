@@ -12,7 +12,6 @@ chrome.runtime.onMessage.addListener(({type, data}, s) => {
             chrome.windows.create({
                 url: "preview.html",
                 type: "popup",
-                width: 900,
                 focused: true
             });
         });
@@ -31,7 +30,7 @@ chrome.storage.local.get("wishlist", ({ wishlist }) => {
 chrome.storage.onChanged.addListener(({ wishlist }, n) => {
     if (n === "local" && wishlist != null) {
         chrome.browserAction.setBadgeText({
-            text: `${wishlist.length}`
+            text: `${wishlist.newValue.length}`
         });
     }
 });
