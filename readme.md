@@ -44,7 +44,7 @@ This extension also provides a wishlist function for you to save the CRNs of the
 3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
 4. Turn on Developer Mode.
 5. Click "Load unpacked".
-6. Choose the unzipped folder. (e.g. `%USERPROFILE%\Documents\timetable-checker`)
+6. Choose the unzipped folder.
 7. The extension is installed and listed in the extensions page.
 
 ## How to update
