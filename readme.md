@@ -27,12 +27,33 @@ This extension also provides a wishlist function for you to save the CRNs of the
 
 ## How to install
 
-1. Download the ZIP archive under Releases or click "Download ZIP" in "Code" and unzip.
-2. Go to the extension page of your browser (e.g. chrome://extensions/)
-3. Turn on Developer Mode.
-4. Click "Load unpacked".
-5. Choose the unzipped folder. (e.g. if your zip archive is unzipped to `C:\Users\yourname\Documents`, then choose `C:\Users\yourname\Documents\timetable-checker-<version>`, while `<version>` is release version (such as `v0.1.0`) or `master`)
-6. The extension is installed and listed in the extensions page.
+### Windows
+
+1. Download the self-extracting archive file `timetable-checker.exe` under Releases.
+2. Run `timetable-checker.exe` to extract all files (by default, they will be extracted to `%USERPROFILE%\Documents\timetable-checker`).
+3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
+4. Turn on Developer Mode.
+5. Click "Load unpacked".
+6. Choose the unzipped folder. (e.g. `%USERPROFILE%\Documents\timetable-checker`)
+7. The extension is installed and listed in the extensions page.
+
+### macOS or Linux
+
+1. Download the ZIP archive file `timetable-checker.zip` under Releases (**Note: Do not** download `Source code (zip)` since doing that will make updating more complicated).
+2. Extract all files in `timetable-checker.zip`.
+3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
+4. Turn on Developer Mode.
+5. Click "Load unpacked".
+6. Choose the unzipped folder. (e.g. `%USERPROFILE%\Documents\timetable-checker`)
+7. The extension is installed and listed in the extensions page.
+
+## How to update
+
+1. Download a new archive file, following the instruction of [How to install](#how-to-install).
+2. Extract the archive to the **same** location that you have installed the extension before. If prompted, choose to replace all existing files.
+3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
+4. Find `CityU Timetable Checker` in the extensions list, and click the refresh button.
+5. The extension is updated.
 
 ## Status explaination
 
