@@ -49,7 +49,7 @@ This extension also provides a wishlist function for you to save the CRNs of the
 
 ## How to update
 
-1. Download a new archive file, following the instruction of [How to install](#how-to-install).
+1. Download the updated archive file, following the instruction of [How to install](#how-to-install).
 2. Extract the archive to the **same** location that you have installed the extension before. If prompted, choose to replace all existing files.
 3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
 4. Find `CityU Timetable Checker` in the extensions list, and click the refresh button.
