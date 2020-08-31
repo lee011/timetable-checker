@@ -1,10 +1,10 @@
-chrome.tabs.onUpdated.addListener(function (i, c, t) {
+/* chrome.tabs.onUpdated.addListener(function (i, c, t) {
     chrome.tabs.query({ url: [ "https://banweb.cityu.edu.hk/*" ] }, function(tabs) {
         for (i = 0; i < tabs.length; i++) { 
             chrome.pageAction.show(tabs[i].id);
         }
     });
-});
+}); */
 
 chrome.runtime.onMessage.addListener(({type, data}, s) => {
     if (type === "preview") {
@@ -15,6 +15,23 @@ chrome.runtime.onMessage.addListener(({type, data}, s) => {
                 width: 900,
                 focused: true
             });
+        });
+    }
+});
+
+chrome.storage.local.get("wishlist", ({ wishlist }) => {
+    chrome.browserAction.setBadgeText({
+        text: `${wishlist.length}`
+    });
+    chrome.browserAction.setBadgeBackgroundColor({
+        color: "#68768a"
+    });
+})
+
+chrome.storage.onChanged.addListener(({ wishlist }, n) => {
+    if (n === "local" && wishlist != null) {
+        chrome.browserAction.setBadgeText({
+            text: `${wishlist.length}`
         });
     }
 });

@@ -36,7 +36,7 @@
             "js/bg.js"
         ]
     },
-    "page_action": {
+    "browser_action": {
         "default_icon": {
             "24": "img/baseline_schedule_white_24dp.png"
         },
