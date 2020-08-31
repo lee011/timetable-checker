@@ -20,7 +20,7 @@
 
         body {
             font-family: Roboto;
-            min-width: 750px;
+            width: 750px;
             min-height: 599px;
             font-size: 16px;
             margin: 0;
@@ -246,7 +246,7 @@
             <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
             <span class="mdc-button__label">Delete Selected</span>
         </button>
-        <ul class="mdc-list" id="crn-list"></ul>
+        <ul class="mdc-list mdc-list--two-line" id="crn-list"></ul>
     </div>
     <div class="mdc-snackbar" aria-live="assertive" aria-atomic="true" aria-hidden="true">
         <div class="mdc-snackbar__surface">
@@ -274,7 +274,10 @@
                     <div class="mdc-checkbox__ripple"></div>
                 </div>
             </div>
-            <label class="mdc-list-item__text">Option 1</label>
+            <label class="mdc-list-item__text">
+                <span class="mdc-list-item__primary-text"></span>
+                <span class="mdc-list-item__secondary-text"></span>
+            </label>
         </li>
     </template>
     <script src="js/popup.js"></script>

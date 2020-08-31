@@ -1,4 +1,4 @@
-const DAYS = " MTWRFS", FULL_REGEX = /.*f.*u.*l.*l.*/i;
+const DAYS = " MTWRFS", FULL_REGEX = /.*f.*u.*l.*l.*/i, NUM_FILTER = /[^\d]/g;
 
 if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdDetl") {
     let classes = [];
@@ -20,8 +20,9 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
         console.log("Saved timetable data", classes);
     });
 } else if (location.href.startsWith("https://banweb.cityu.edu.hk/pls/PROD/hwscrssh_cityu.P_DispOneSection")) {
-    chrome.storage.local.get("ttb", ({ ttb }) => {
+    chrome.storage.local.get(["ttb", "wishlist"], ({ ttb, wishlist }) => {
         let ctd$;
+        let params = new URLSearchParams(location.search);
         $(".body table[border] tr").each((i, v) => {
             if (i === 0) {
                 let th1$ = $("<th></th>").text("Status");
@@ -30,18 +31,34 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
             } else {
                 let flag = true;
                 let crash = null;
+                let wlitem = null;
+                let wlidx = 0;
                 let td1$ = $("<td></td>");
                 let td2$ = $("<td></td>");
                 let td3$ = $("<td></td>");
                 if ($(v).is("[bgcolor='#ffccff']")) {
-                    if ($(v).children().eq(6).text().trim() !== "")
+                    if ($(v).children().eq(6).text().trim() !== "") {
                         ctd$ = $(v);
+                        wlitem = wishlist.find(({ crn }) => crn === parseInt(ctd$.children().eq(0).text()));
+                        if (wlitem != null) {
+                            wlitem.status = {
+                                course: `${params.get("subj")}${params.get("crse")}`,
+                                section: ctd$.children().eq(1).text().trim(),
+                                avail: FULL_REGEX.test(ctd$.children().eq(6).text()) ? 0 : parseInt(ctd$.children().eq(6).text().replace(NUM_FILTER, "")),
+                                cap: parseInt(ctd$.children().eq(7).text().replace(NUM_FILTER, "")),
+                                waitlist: ctd$.children().eq(8).text().includes("N") ? false : (FULL_REGEX.test(ctd$.children().eq(8).text()) ? 0 : parseInt(ctd$.children().eq(8).text().replace(NUM_FILTER, ""))),
+                                conflict: false,
+                                updated: new Date().getTime()
+                            };
+                        }
+                    }
                     if (ttb.findIndex(u => u.crn === parseInt(ctd$.children().eq(0).text())) !== -1) {
                         td1$.css("color", "red").text(`Course registered`);
                     } else {
                         if (FULL_REGEX.test(ctd$.children().eq(6).text())) {
                             if (FULL_REGEX.test(ctd$.children().eq(8).text())) {
                                 td1$.css("color", "red").text("Section is full, waitlist full");
+
                             } else if (ctd$.children().eq(8).text().includes("N")) {
                                 td1$.css("color", "red").text("Section is full, waitlist not available");
                             } else {
@@ -63,6 +80,9 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                             }
                                         }
                                     }
+                                    if (wlitem != null) {
+                                        wlitem.status.conflict = flag ? false : crash;
+                                    }
                                     if (flag) {
                                         td1$.css("color", "darkorange").html("Section is full, waitlist available<br />No conflicts");
                                         if ($(v).children().eq(0).text().trim() !== "") {
@@ -74,7 +94,7 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                     } else {
                                         td1$.css("color", "red").html(`Section is full, waitlist available<br />Conflicts with ${crash}`);
                                         if ($(v).children().eq(0).text().trim() !== "") {
-                                            td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": "true", "data-waitlist": "true", "href": "#" }).click(addCRNToWishlist));
+                                            td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": crash, "data-waitlist": "true", "href": "#" }).click(addCRNToWishlist));
                                         }
                                         if ($(v).children().eq(11).text().trim() !== "") {
                                             td3$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
@@ -101,6 +121,9 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                         }
                                     }
                                 }
+                                if (wlitem != null) {
+                                    wlitem.status.conflict = flag ? false : crash;
+                                }
                                 if (flag) {
                                     td1$.css("color", "green").text("No conflicts");
                                     if ($(v).children().eq(0).text().trim() !== "") {
@@ -112,7 +135,7 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                 } else {
                                     td1$.css("color", "red").text(`Conflicts with ${crash}`);
                                     if ($(v).children().eq(0).text().trim() !== "") {
-                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": "true", "href": "#" }).click(addCRNToWishlist));
+                                        td2$.append($("<a></a>").text("Add to Wishlist").attr({ "data-crn": $(v).children().eq(0).text(), "data-crash": crash, "href": "#" }).click(addCRNToWishlist));
                                     }
                                     if ($(v).children().eq(11).text().trim() !== "") {
                                         td3$.append($("<a></a>").text("Preview").attr("href", "#").click(preview));
@@ -129,11 +152,12 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                 $(v).append([td1$, td2$, td3$]);
             }
         });
+        chrome.storage.local.set({ wishlist: wishlist });
     });
 } else if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfreg.P_AltPin") {
     chrome.storage.local.get(["wishlist", "autofill"], ({ wishlist, autofill }) => {
         if (autofill) {
-            wishlist.forEach((v, i) => {
+            wishlist.map(v => v.crn).forEach((v, i) => {
                 if (i < 10)
                     document.querySelectorAll("input[name='CRN_IN'][id]")[i].value = v;
             });
@@ -162,8 +186,22 @@ function preview() {
 }
 
 function addCRNToWishlist() {
-    console.log("add to wishlist triggered with crn:", $(this).data("crn"));
+    let params = new URLSearchParams(location.search);
     chrome.storage.local.get(["ttb", "wishlist"], ({ ttb, wishlist }) => {
+        let ctd$ = $(this).parents("tr");
+        let data = {
+            crn: $(this).data("crn"),
+            status: {
+                course: `${params.get("subj")}${params.get("crse")}`,
+                section: ctd$.children().eq(1).text().trim(),
+                avail: FULL_REGEX.test(ctd$.children().eq(6).text()) ? 0 : parseInt(ctd$.children().eq(6).text().replace(NUM_FILTER, "")),
+                cap: parseInt(ctd$.children().eq(7).text().replace(NUM_FILTER, "")),
+                waitlist: ctd$.children().eq(8).text().includes("N") ? false : (FULL_REGEX.test(ctd$.children().eq(8).text()) ? 0 : parseInt(ctd$.children().eq(8).text().replace(NUM_FILTER, ""))),
+                conflict: $(this).data("crash") ?? false,
+                updated: new Date().getTime()
+            }
+        };
+        console.log("add to wishlist triggered with data:", data);
         if (wishlist == null) {
             wishlist = [];
         }
@@ -172,8 +210,8 @@ function addCRNToWishlist() {
             setTimeout(() => f$.remove(), 5000);
             return false;
         }
-        if (wishlist.includes($(this).data("crn"))) {
-            let f$ = $("<div></div>").css({ "font-size": "18px", "padding": "8px", "position": "fixed", "top": "20px", "right": "20px", "background-color": "white", "border": "5px solid red", "color": "red" }).text("CRN already exist").appendTo(document.body);
+        if (wishlist.findIndex(({crn}) => crn === $(this).data("crn")) !== -1) {
+            let f$ = $("<div></div>").css({ "font-size": "18px", "padding": "8px", "position": "fixed", "top": "20px", "right": "20px", "background-color": "white", "border": "5px solid red", "color": "red" }).text("CRN already exist in the wishlist").appendTo(document.body);
             setTimeout(() => f$.remove(), 5000);
             return false;
         }
@@ -185,7 +223,7 @@ function addCRNToWishlist() {
             if (!confirm("This course section is full and waitlist available.\n\nYou will be put into the waitlist if you try to register this course.\n\nYOU MAY NOT BE ABLE TO REGISTER THIS COURSE AT THE END.\n\nProceed anyway?"))
                 return false;
         }
-        wishlist.push($(this).data("crn"));
+        wishlist.push(data);
         chrome.storage.local.set({ wishlist: wishlist }, () => {
             let f$ = $("<div></div>").css({ "font-size": "18px", "padding": "8px", "position": "fixed", "top": "20px", "right": "20px", "background-color": "white", "border": "5px solid black" }).text("CRN added to wishlist").appendTo(document.body);
             setTimeout(() => f$.remove(), 5000);

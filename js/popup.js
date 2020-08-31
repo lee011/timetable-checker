@@ -57,11 +57,35 @@ chrome.storage.local.get(["ttb", "wishlist", "autofill"], ({ ttb, wishlist, auto
     }
 
     if (wishlist != null) {
-        wishlist.map(v => {
+        wishlist.forEach(({ crn, status: { course, section, avail, cap, waitlist, conflict, updated } }) => {
             let n = document.importNode(document.querySelector("#crn-item-template").content, true);
-            $(n.children[0]).find(".mdc-checkbox__native-control").attr("id", `crn-${v}`);
-            $(n.children[0]).find(".mdc-list-item__text").text(v).attr("for", `crn-${v}`);
-            $(n.children[0]).attr("data-crn", v).appendTo("#crn-list");
+            $(n.children[0]).find(".mdc-checkbox__native-control").attr("id", `crn-${crn}`);
+            $(n.children[0]).find(".mdc-list-item__text").attr("for", `crn-${crn}`);
+            $(n.children[0]).find(".mdc-list-item__primary-text").text(`${crn} (${course} ${section})`);
+            if (status == null)
+                $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "red").text("Check Master Class Schedule for details."));
+            else {
+                if (avail === 0) {
+                    if (waitlist === false) {
+                        $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "red").text(`Section is full, waitlist not available`));
+                    } else if (waitlist === 0) {
+                        $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "red").text(`Section is full, waitlist full`));
+                    } else {
+                        $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "darkorange").text(`Section is full, waitlist remaining ${waitlist}`));
+                    }
+                } else {
+                    $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "green").text(`Available: ${avail} / ${cap}`));
+                }
+                $(n.children[0]).find(".mdc-list-item__secondary-text").append("; ");
+                if (conflict) {
+                    $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "red").text(`Conflicts with ${conflict}`));
+                } else {
+                    $(n.children[0]).find(".mdc-list-item__secondary-text").append($("<span></span>").css("color", "green").text(`No conflicts`));
+                }
+                $(n.children[0]).find(".mdc-list-item__secondary-text").append("; ");
+                $(n.children[0]).find(".mdc-list-item__secondary-text").append(`Updated ${moment(updated).fromNow()}`);
+            }
+            $(n.children[0]).attr("data-crn", crn).appendTo("#crn-list");
         });
 
         document.querySelectorAll(".mdc-list-item").forEach((v, i) => {
@@ -107,7 +131,7 @@ function deleteCRN() {
     chrome.storage.local.get("wishlist", ({ wishlist }) => {
         let sel$ = $("#crn-list .mdc-list-item.mdc-list-item--selected");
         if (sel$.length > 0) {
-            sel$.each((i, li) => wishlist.splice(wishlist.indexOf($(li).data("crn")), 1));
+            sel$.each((i, li) => wishlist.splice(wishlist.findIndex(({ crn }) => crn === $(li).data("crn")), 1));
             chrome.storage.local.set({ wishlist: wishlist }, () => {
                 snackbar.labelText = "Selected CRNs are removed from wishlist.";
                 snackbar.open();
@@ -145,13 +169,15 @@ function addCRNToWishlist(crn) {
             snackbar.open();
             return;
         }
-        wishlist.push(crn);
+        wishlist.push({ crn: crn, status: null });
         chrome.storage.local.set({ wishlist: wishlist }, () => {
             snackbar.labelText = "CRN added to wishlist.";
             snackbar.open();
             let n = document.importNode(document.querySelector("#crn-item-template").content, true);
             $(n.children[0]).find(".mdc-checkbox__native-control").attr("id", `crn-${crn}`);
-            $(n.children[0]).find(".mdc-list-item__text").text(crn).attr("for", `crn-${crn}`);
+            $(n.children[0]).find(".mdc-list-item__text").attr("for", `crn-${crn}`);
+            $(n.children[0]).find(".mdc-list-item__primary-text").text(crn);
+            $(n.children[0]).find(".mdc-list-item__secondary-text").text("No details saved; Please check Master Class Schedule for details.");
             $(n.children[0]).attr("data-crn", crn).appendTo("#crn-list");
 
             list.layout();
