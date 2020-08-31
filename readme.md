@@ -29,7 +29,7 @@ This extension also provides a wishlist function for you to save the CRNs of the
 
 ### Windows
 
-1. Download the self-extracting archive file `timetable-checker.exe` under Releases.
+1. Download the self-extracting archive file `timetable-checker.exe` under [Releases](https://github.com/lee011/timetable-checker/releases/latest).
 2. Run `timetable-checker.exe` to extract all files (by default, they will be extracted to `%USERPROFILE%\Documents\timetable-checker`).
 3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
 4. Turn on Developer Mode.
@@ -39,7 +39,7 @@ This extension also provides a wishlist function for you to save the CRNs of the
 
 ### macOS or Linux
 
-1. Download the ZIP archive file `timetable-checker.zip` under Releases (**Note: Do not** download `Source code (zip)` since doing that will make updating more complicated).
+1. Download the ZIP archive file `timetable-checker.zip` under [Releases](https://github.com/lee011/timetable-checker/releases/latest) (**Note: Do not** download `Source code (zip)` since doing that will make updating more complicated).
 2. Extract all files in `timetable-checker.zip`.
 3. Go to the extension page of your browser (e.g. `chrome://extensions/`)
 4. Turn on Developer Mode.
