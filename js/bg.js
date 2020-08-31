@@ -19,9 +19,11 @@ chrome.runtime.onMessage.addListener(({type, data}, s) => {
 });
 
 chrome.storage.local.get("wishlist", ({ wishlist }) => {
-    chrome.browserAction.setBadgeText({
-        text: `${wishlist.length}`
-    });
+    if (wishlist) {
+        chrome.browserAction.setBadgeText({
+            text: `${wishlist.length}`
+        });
+    }
     chrome.browserAction.setBadgeBackgroundColor({
         color: "#68768a"
     });
