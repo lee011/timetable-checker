@@ -8,10 +8,14 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
         j['name'] = z.eq(i).find("caption").text().split(" - ");
         j['crn'] = parseInt(z.eq(i).find("tr").eq(1).children().eq(1).text());
         j['times'] = z.eq(i + 1).find("tr").slice(1).get().map(v => {
-            return {
-                time: $(v).children().eq(1).text().split(" - "),
-                day: DAYS.indexOf($(v).children().eq(2).text()),
-                range: $(v).children().eq(4).text().split(" - ")
+            if ($(v).children().eq(1).text() === "TBA") {
+                return null;
+            } else {
+                return {
+                    time: $(v).children().eq(1).text().split(" - "),
+                    day: DAYS.indexOf($(v).children().eq(2).text()),
+                    range: $(v).children().eq(4).text().split(" - ")
+                };
             }
         });
         classes.push(j);
@@ -72,6 +76,7 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                     let ztime = $(v).children().eq(11).text().split(" - ").map(t => new moment(t, "HH:mm"));
                                     y: for (let i of ttb) {
                                         for (let j of i.times) {
+                                            if (j === null) continue;
                                             let times = j.time.map(t => new moment(t, "hh:mm a"));
                                             if (day === j.day && (ztime.some(m => m.isBetween(times[0], times[1], undefined, "[]")) || times.some(m => m.isBetween(ztime[0], ztime[1], undefined, "[]")))) {
                                                 flag = false;
@@ -113,6 +118,7 @@ if (location.href === "https://banweb.cityu.edu.hk/pls/PROD/bwskfshd.P_CrseSchdD
                                 let ztime = $(v).children().eq(11).text().split(" - ").map(t => new moment(t, "HH:mm"));
                                 x: for (let i of ttb) {
                                     for (let j of i.times) {
+                                        if (j === null) continue;
                                         let times = j.time.map(t => new moment(t, "hh:mm a"));
                                         if (day === j.day && (ztime.some(m => m.isBetween(times[0], times[1], undefined, "[]")) || times.some(m => m.isBetween(ztime[0], ztime[1], undefined, "[]")))) {
                                             flag = false;

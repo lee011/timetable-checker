@@ -12,6 +12,10 @@ chrome.storage.local.get(["ttb", "preview"], ({ ttb, preview }) => {
 
     ttb.forEach((i) => {
         i.times.forEach(j => {
+            if (j === null) {
+                $("#no-scheduled-time").show().append(`<br />${i.name[1].replace(" ", "")} ${i.name[2]}`);
+                return;
+            }
             let times = j.time.map(t => new moment(t, "hh:mm a"));
             let id = `ttb-${j.day}-${times[0].hour() - 7}-${times[1].hour() - 6}`;
             if ($(`#${id}`).length === 0) {
