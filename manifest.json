@@ -12,7 +12,7 @@
         },
         {
             "js": [
-                "js/read.js"
+                "js/moment.min.js"
             ],
             "matches": [
                 "https://banweb.cityu.edu.hk/*"
@@ -22,7 +22,7 @@
         },
         {
             "js": [
-                "js/moment.min.js"
+                "js/read.js"
             ],
             "matches": [
                 "https://banweb.cityu.edu.hk/*"

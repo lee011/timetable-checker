@@ -11,7 +11,7 @@ Timetable checker for CityU mates. It reads class information from AIMS and matc
 
 ## Browser Support
 
-This is a Chromium-based-browser extension that can be installed on the latest desktop versions of Google Chrome, Opera and Microsoft Edge. (Other Chromium-based browsers may be used, but we do not guarantee it works)
+This is a Chromium-based-browser extension that can be installed on the latest desktop versions of Google Chrome, Vivaldi and Microsoft Edge. (Other Chromium-based browsers may be used, but we do not guarantee it works)
 
 ## How it works
 
