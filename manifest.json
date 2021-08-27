@@ -48,7 +48,8 @@
     "name": "CityU Timetable Checker",
     "permissions": [
         "https://banweb.cityu.edu.hk/*",
-        "storage"
+        "storage",
+        "contextMenus"
     ],
-    "version": "0.2.1"
+    "version": "0.3.1"
 }

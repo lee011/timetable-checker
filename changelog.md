@@ -1,6 +1,18 @@
 # CityU Timetable Checker
 
-&copy; 2020 Kelvin Lee. All rights reserved.
+&copy; 2020-2021 Kelvin Lee. All rights reserved.
+
+## Version 0.3.1 (Released on 27/08/2021)
+
+**New functions:**
+
+- Add a context menu (right-click menu) item that can jump to Master Class Schedule immediately.
+![Example image of context menu item](context.png)
+- Adjusted auto-filling function. Sections which are full will not be auto-filled.
+
+**Fixes:**
+
+- No response when adding CRNs manually to the wishlist.
 
 ## Version 0.3.0 (Released on 30/12/2020)
 

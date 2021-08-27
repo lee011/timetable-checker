@@ -21,7 +21,7 @@ Then, when you browse the Master Class Schedule and check sections provided by a
 
 The extension will append 3 cells to each row of the table, showing the status and available actions. (Example below)
 
-![image](example.png)
+![Example image of Master Class Schedule](example.png)
 
 This extension also provides a wishlist function for you to save the CRNs of the courses you want to register. It can also auto-fill the CRNs in the wishlist to the Add Classes Worksheet in the add/drop interface. (You still need to click "Submit changes" button **manually** to apply changes)
 

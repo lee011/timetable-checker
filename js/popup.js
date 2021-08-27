@@ -4,8 +4,8 @@ const tabBar = new mdc.tabBar.MDCTabBar(document.querySelector(".mdc-tab-bar")),
     snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar')),
     s_autofill = new mdc.switchControl.MDCSwitch(document.querySelector('#autofill-switch-container')),
     d_details = new mdc.dialog.MDCDialog(document.querySelector("#section-details-dialog")),
-    START_DATE = "2020-11-03 08:30:00",
-    END_DATE = "2021-01-18 23:30:00",
+    START_DATE = "2021-07-27 08:30:00",
+    END_DATE = "2021-09-06 23:30:00",
     DAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 snackbar.timeoutMs = 4000;
@@ -44,16 +44,23 @@ chrome.storage.local.get(["ttb", "wishlist", "autofill"], ({ ttb, wishlist, auto
     s_autofill.checked = autofill || false;
 
     if (ttb != null) {
-        ttb.forEach((i) => {
+        let m1 = moment(ttb.meta[2], "MMM DD, YYYY h:mm a");
+        $("#meta-text").text(`${ttb.meta[0]}, ${ttb.meta[1]}, updated at ${m1.format("dddd, Do MMMM, YYYY HH:mm")}`);
+        ttb.classes.forEach((i) => {
             i.times.forEach(j => {
-                if (j === null) {
-                    $("#no-scheduled-time").show().append(`<br />${i.name[1].replace(" ", "")} ${i.name[2]}`);
+                if (j === null || j.time === null) {
+                    let div$ = $("<div></div>");
+                    div$.html(`${i.name[1].replace(" ", "")} ${i.name[2]}`);
+                    div$.attr("title", `${i.name[0]}\n${i.crn}\n${i.instruct}`);
+                    div$.attr("data-crse", `${i.name[1]},${i.name[2]}`);
+                    div$.click(showDetails);
+                    $("#no-scheduled-time").show().append(div$);
                     return;
                 }
                 let times = j.time.map(t => new moment(t, "hh:mm a"));
                 let id = `ttb-${j.day}-${times[0].hour() - 7}-${times[1].hour() - 6}`;
                 if ($(`#${id}`).length === 0) {
-                    let div$ = $("<div></div");
+                    let div$ = $("<div></div>");
                     div$.html(`${i.name[1].replace(" ", "")} <small>${i.name[2]}</small><br /><small>${j.loc}</small>`);
                     div$.attr("title", `${i.name[0]}\n${i.crn}\n${times[0].format("HH:mm")} - ${times[1].format("HH:mm")}\n${i.instruct}`);
                     div$.attr("id", id);
@@ -163,7 +170,7 @@ $("#add-crn-input").keydown((e) => {
 function showDetails(e) {
     chrome.storage.local.get("ttb", ({ ttb }) => {
         $("#section-details-table .mdc-data-table__content").empty();
-        let le = ttb.find(v => {
+        let le = ttb.classes.find(v => {
             let g = $(e.target).data("crse").split(",");
             return v.name[1] === g[0] && v.name[2] === g[1];
         });
@@ -173,10 +180,10 @@ function showDetails(e) {
             ["Course Name", le.name[0]],
             ["Section", le.name[2]],
             ["CRN", le.crn],
-            ["Time", le.times.map(w => w.time.join(" - ")).join("<br />")],
-            ["Days", le.times.map(w => DAYS[w.day]).join("<br />")],
-            ["Where", le.times.map(w => w.loc).join("<br />")],
-            ["Date Range", le.times.map(w => w.range.join(" - ")).join("<br />")],
+            ["Time", le.times.map(w => w?.time?.join(" - ") ?? "").join("<br />")],
+            ["Days", le.times.map(w => w ? DAYS[w.day] : "").join("<br />")],
+            ["Where", le.times.map(w => w?.loc ?? "").join("<br />")],
+            ["Date Range", le.times.map(w => w?.range?.join(" - ") ?? "").join("<br />")],
             ["Instructor", le.instruct]
         ];
         $("#section-details-table .mdc-data-table__content").append(details.map(de => {
@@ -221,7 +228,7 @@ function addCRNToWishlist(crn) {
         if (wishlist == null) {
             wishlist = [];
         }
-        if (ttb.findIndex(v => v.crn === crn) !== -1) {
+        if (ttb.classes.findIndex(v => v.crn === crn) !== -1) {
             snackbar.labelText = "This course is already registered.";
             snackbar.open();
             return;

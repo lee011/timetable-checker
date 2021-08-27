@@ -6,6 +6,18 @@
     });
 }); */
 
+chrome.contextMenus.create({
+    "title": "Go to Master Class Schedule",
+    "id": "nav-mcs",
+    "contexts": ["page"],
+    "onclick": function (e, t) {
+        chrome.tabs.sendMessage(t.id, { action: "mcs" });
+    },
+    "documentUrlPatterns": ["https://banweb.cityu.edu.hk/*"]
+}, function () {
+    if (chrome.runtime.lastError) console.error(chrome.runtime.lastError.message);
+});
+
 chrome.runtime.onMessage.addListener(({type, data}, s) => {
     if (type === "preview") {
         chrome.storage.local.set({ preview: data }, () => {

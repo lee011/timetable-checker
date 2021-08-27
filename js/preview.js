@@ -10,7 +10,7 @@ for (let i = 0; i < 16; i++) {
 
 chrome.storage.local.get(["ttb", "preview"], ({ ttb, preview }) => {
 
-    ttb.forEach((i) => {
+    ttb.classes.forEach((i) => {
         i.times.forEach(j => {
             if (j === null) {
                 $("#no-scheduled-time").show().append(`<br />${i.name[1].replace(" ", "")} ${i.name[2]}`);
